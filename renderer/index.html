@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:"
+    />
+    <title>Max</title>
+    <link rel="stylesheet" href="../node_modules/@xterm/xterm/css/xterm.css" />
+    <link rel="stylesheet" href="../node_modules/@phosphor-icons/web/src/regular/style.css" />
+    <link rel="stylesheet" href="styles/shell.css" />
+    <link rel="stylesheet" href="styles/apps.css" />
+    <link rel="stylesheet" href="styles/review.css" />
+    <link rel="stylesheet" href="styles/explorer.css" />
+    <link rel="stylesheet" href="../node_modules/vanilla-jsoneditor/themes/jse-theme-dark.css" />
+  </head>
+  <body>
+    <aside id="sidebar">
+      <div id="sidebar-sash" title="Drag to resize · double-click to reset"></div>
+      <div class="drag titlebar"></div>
+      <ul id="ws-list"></ul>
+    </aside>
+
+    <main id="main">
+      <div id="empty" class="empty hidden">
+        <div class="drag titlebar"></div>
+        <div class="empty-inner">
+          <img class="logo" src="assets/logo.png" alt="" width="88" height="88" />
+          <h1>Max</h1>
+          <p>Run several Claude Code agents side by side, each in its own git worktree.</p>
+          <button id="btn-new-empty" class="primary">Open a repository <kbd>⌘N</kbd></button>
+        </div>
+      </div>
+      <div id="views"></div>
+    </main>
+
+    <div id="modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <form id="new-form" class="sheet">
+        <h2 id="modal-title">New worktree</h2>
+        <label>
+          <span>Repository</span>
+          <div class="row">
+            <select id="f-repo"></select>
+            <button type="button" id="f-browse">Browse…</button>
+          </div>
+        </label>
+        <div class="row two">
+          <label>
+            <span id="f-base-label">Base branch</span>
+            <select id="f-base"></select>
+          </label>
+          <label>
+            <span>Name <em>(optional)</em></span>
+            <input id="f-name" placeholder="Derived from the task" />
+          </label>
+        </div>
+        <label class="check">
+          <input type="checkbox" id="f-worktree" checked />
+          <span>Isolated git worktree on a new <code>deck/…</code> branch</span>
+        </label>
+        <label>
+          <span>Task <em>(optional, sent as the first prompt)</em></span>
+          <textarea id="f-prompt" rows="5" placeholder="e.g. Fix the double-booking bug in the reservation flow and add a test"></textarea>
+        </label>
+        <label id="f-setup-wrap">
+          <span>Setup command <em>(runs in the worktree’s shell, remembered per repo)</em></span>
+          <input id="f-setup" placeholder='e.g. cp "$DECK_ROOT_PATH/.env" . && npm ci' spellcheck="false" />
+        </label>
+        <label>
+          <span>Claude command <em>(replaces <code>claude</code>; its arguments are appended, remembered per repo)</em></span>
+          <input id="f-claude-cmd" placeholder="claude" spellcheck="false" />
+        </label>
+        <p id="f-error" class="error"></p>
+        <div class="actions">
+          <button type="button" id="f-cancel">Cancel</button>
+          <button type="submit" class="primary" id="f-submit">Create <kbd>⌘↵</kbd></button>
+        </div>
+      </form>
+    </div>
+
+    <script src="../node_modules/@xterm/xterm/lib/xterm.js"></script>
+    <script src="../node_modules/@xterm/addon-fit/lib/addon-fit.js"></script>
+    <script src="../node_modules/@xterm/addon-web-links/lib/addon-web-links.js"></script>
+    <script src="../node_modules/@xterm/addon-unicode11/lib/addon-unicode11.js"></script>
+    <script src="../node_modules/@xterm/addon-webgl/lib/addon-webgl.js"></script>
+    <script src="../node_modules/@highlightjs/cdn-assets/highlight.min.js"></script>
+    <script src="../node_modules/@highlightjs/cdn-assets/languages/graphql.min.js"></script>
+    <script src="../node_modules/@highlightjs/cdn-assets/languages/swift.min.js"></script>
+    <script src="../node_modules/@highlightjs/cdn-assets/languages/kotlin.min.js"></script>
+    <script src="../node_modules/@highlightjs/cdn-assets/languages/groovy.min.js"></script>
+    <script src="../node_modules/@highlightjs/cdn-assets/languages/dockerfile.min.js"></script>
+    <script src="../node_modules/marked/lib/marked.umd.js"></script>
+    <script src="../node_modules/dompurify/dist/purify.min.js"></script>
+    <!-- Shared helpers, then the tabs' views, the apps, and the shell (order matters: see shell/state.js). -->
+    <script src="lib/kit.js"></script>
+    <script src="lib/theme.js"></script>
+    <script src="views/review.js"></script>
+    <script src="views/search.js"></script>
+    <script src="views/explorer.js"></script>
+    <script src="apps/index.js"></script>
+    <script src="apps/json.js"></script>
+    <script src="apps/network.js"></script>
+    <script src="apps/notes.js"></script>
+    <script src="apps/tasks.js"></script>
+    <script src="apps/activity.js"></script>
+    <script src="apps/rn-console.js"></script>
+    <script src="apps/device-mirror.js"></script>
+    <script src="apps/converters.js"></script>
+    <script src="shell/state.js"></script>
+    <script src="shell/terminals.js"></script>
+    <script src="shell/tabs.js"></script>
+    <script src="shell/sidebar.js"></script>
+    <script src="shell/new-worktree.js"></script>
+    <script src="shell/tooltip.js"></script>
+    <script src="shell/palette.js"></script>
+    <script src="shell/app.js"></script>
+  </body>
+</html>
